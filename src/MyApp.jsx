@@ -189,7 +189,7 @@ const PROJECTS = [
       "Wiring integration (RX/ESC/telemetry); PLA vs PAHT‑CF stress checks.",
     ],
     // Reverted tags to pre-change set including Brushless
-    tags: ["CAD", "3D Print", "Arduino", "RX/TX", "SolidWorks", "CFD", "Aero"],
+    tags: ["CAD", "3D Print", "Arduino", "RX/TX", "SolidWorks", "CFD", "Aero", "Servo"],
   },
   {
     slug: "ecocar-alt-fuels",
