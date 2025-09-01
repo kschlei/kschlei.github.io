@@ -105,6 +105,58 @@ const PROJECTS = [
       "Duct geometry clears roll‑cage; quick‑swap serviceability.",
     ],
     tags: ["Baja", "Cooling", "Ducting", "Validation"],
+
+    // ---- NEW: Calculations & Analysis content ----
+    analysisTitle: "Calculations and Analysis for CVT",
+    analysis: [
+      {
+        heading: "Primary Clutch",
+        paragraphs: [
+          "Tuning the CVT to engage at an RPM that matches the engine's torque peak allows efficient power transfer and responsiveness. Based on the CX9 torque curve, this was observed to be ~2800 RPM.",
+          "Using this, engagement RPM measured via tachometer was ~3000 RPM. This indicated engagement was slightly higher than the recommended ~2800 RPM and helped explain late torque transfer / poor hill‑climb performance in the 2024 vehicle.",
+        ],
+        images: [
+          "/projects/cvt/CVT2.jpg",
+          "/projects/cvt/CVT3.jpg",
+        ],
+      },
+      {
+        heading: "Flyweights",
+        paragraphs: [
+          "Lighter flyweights delay shift‑out (higher engagement RPM) for better acceleration/top speed—good for flat/high‑speed. Heavier flyweights promote earlier engagement, enhancing low‑end torque for climbs—addressing baseline late engagement at ~3650 RPM.",
+          "To select a starting weight, centrifugal force balance was used with r = 0.05 m and ω = 376.99 rad/s (from baseline data). Test table indicated 18 g (stock 15 g) as a good starting point for tuning.",
+        ],
+        images: [
+          "/projects/cvt/CVT4.jpg",
+        ],
+      },
+      {
+        heading: "Engagement RPM Tracking",
+        paragraphs: [
+          "During new flyweight tests, the following relationship was used to track updated engine speeds at which the flyweight engages (recorded per test pass).",
+        ],
+        images: [
+          "/projects/cvt/CVT5.jpg",
+        ],
+      },
+      {
+        heading: "Primary Spring & Preload",
+        paragraphs: [
+          "Primary spring stiffness critically affects engagement. A stiffer spring helps hold the engine in its power band by increasing engagement RPM; too soft risks low‑speed power loss. With a 200 lb stock spring, ~220 lb proved a better match for late engagement issues while balancing the new flyweights.",
+          "Hooke’s law and adjusted preload were used to size initial conditions and keep forces reasonable while holding the target shift point near ~3600 RPM (from baseline).",
+        ],
+        images: [
+          "/projects/cvt/CVT6.jpg",
+        ],
+      },
+      {
+        heading: "Secondary Clutch",
+        paragraphs: [
+          "Torsional spring preload impacts belt tension and torque transfer; increasing preload increases clamping, reducing slip but raising heat. Overheating was a 2024 issue; we added ducted ventilation to the CVT casing to enable torsion adjustments.",
+          "Initial modification was +10–20% torsional stiffness to aid torque transfer, followed by incline testing to balance wear vs. performance. Belt tension was monitored closely—insufficient tension slips; excessive tension accelerates wear and reduces efficiency.",
+        ],
+      },
+    ],
   },
   {
     slug: "rc-f1",
@@ -137,7 +189,7 @@ const PROJECTS = [
       "Wiring integration (RX/ESC/telemetry); PLA vs PAHT‑CF stress checks.",
     ],
     // Reverted tags to pre-change set including Brushless
-    tags: ["CAD", "3D Print", "Arduino", "Brushless", "SolidWorks", "CFD", "Aero", "Servo"],
+    tags: ["CAD", "3D Print", "Arduino", "RX/TX", "SolidWorks", "CFD", "Aero"],
   },
   {
     slug: "ecocar-alt-fuels",
@@ -385,10 +437,11 @@ function HomePage() {
             <div className="md:col-span-2">
               <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">{PROFILE.name}</h1>
               <p className="mt-3 text-lg text-emerald-100/90">{PROFILE.role} — {PROFILE.line2}</p>
-              <p className="mt-2 text-emerald-200/80 max-w-2xl">
-                I design clean, testable electromechanical systems and build tooling to validate them fast.
-                Current focus: high‑voltage DC power distribution, thermal/FEA, and perception & fusion for robotics.
-              </p>
+              <div className="mt-2 text-emerald-200/80 max-w-2xl space-y-3">
+                <p>I’m an aspiring vehicle systems and design engineer and Mechatronics student at the University of Waterloo 🤖. I like turning ideas into working, testable hardware—pairing clean design with the tooling, data, and docs to prove it 🛠️📝. I work fast, communicate clearly, and play well with cross-disciplinary teams 🤝.</p>
+                <p><strong>Current focus:</strong> ⚡ high-voltage power systems · 📡 CAN/CAN-FD networking · 🌬️ aerodynamic chassis (CAD → CFD → prototype).</p>
+                <p><strong>How I work:</strong> design → instrument → validate → iterate, with concise updates and reproducible tests 📈.<br/><strong>What you get:</strong> reliable builds and a teammate who’s coachable, curious, and outcome-driven.</p>
+              </div>
               <div className="mt-6 flex flex-wrap gap-3">
                 <a href={LINKS.resume} className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400 text-emerald-950 px-4 py-2 text-sm font-semibold shadow hover:brightness-110">
                   <span>Download Résumé</span>
@@ -462,9 +515,12 @@ function HomePage() {
                       <span className="text-xs text-emerald-200/70">{p.role}</span>
                     </div>
                     <p className="mt-2 text-sm text-emerald-100/90">{p.summary}</p>
-                    <ul className="mt-3 space-y-1 text-sm text-emerald-100/85 list-disc pl-5">
+                    <ul className="mt-3 space-y-1 text-sm text-emerald-100/85">
                       {p.bullets?.map((b, j) => (
-                        <li key={j}>{b}</li>
+                        <li key={j} className="flex items-start gap-2">
+                          <span aria-hidden="true">🟢</span>
+                          <span>{b}</span>
+                        </li>
                       ))}
                     </ul>
                     <div className="mt-4 flex flex-wrap gap-2">
@@ -605,6 +661,7 @@ function ProjectPage() {
               <a href="#approach" className="hover:underline">Approach</a>
             ) : (p.solution?.length ? <a href="#solution" className="hover:underline">Solution</a> : null)}
             {p.validation?.length ? <a href="#validation" className="hover:underline">Validation</a> : null}
+            {p.analysis?.length ? <a href="#analysis" className="hover:underline">Analysis</a> : null}
             {p.outcome?.length ? <a href="#results" className="hover:underline">Outcomes</a> : null}
             {p.tools?.length ? <a href="#tech" className="hover:underline">Tools</a> : null}
           </nav>
@@ -670,8 +727,13 @@ function ProjectPage() {
             <section id="problem" className="py-10 border-t border-white/10">
               <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                 <h2 className="text-xl font-display font-bold">Problem</h2>
-                <ul className="mt-4 list-disc pl-5 space-y-2 text-emerald-100/85">
-                  {p.problem.map((x, i) => <li key={i}>{x}</li>)}
+                <ul className="mt-4 space-y-2 text-emerald-100/85">
+                  {p.problem.map((x, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span aria-hidden="true">⚠️</span>
+                      <span>{x}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </section>
@@ -681,8 +743,13 @@ function ProjectPage() {
             <section id="approach" className="py-10 border-t border-white/10">
               <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                 <h2 className="text-xl font-display font-bold">Approach</h2>
-                <ul className="mt-4 list-disc pl-5 space-y-2 text-emerald-100/85">
-                  {p.approach.map((x, i) => <li key={i}>{x}</li>)}
+                <ul className="mt-4 space-y-2 text-emerald-100/85">
+                  {p.approach.map((x, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span aria-hidden="true">🧪</span>
+                      <span>{x}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </section>
@@ -692,8 +759,13 @@ function ProjectPage() {
             <section id="solution" className="py-10 border-t border-white/10">
               <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                 <h2 className="text-xl font-display font-bold">Solution</h2>
-                <ul className="mt-4 list-disc pl-5 space-y-2 text-emerald-100/85">
-                  {p.solution.map((x, i) => <li key={i}>{x}</li>)}
+                <ul className="mt-4 space-y-2 text-emerald-100/85">
+                  {p.solution.map((x, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span aria-hidden="true">🛠️</span>
+                      <span>{x}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </section>
@@ -703,8 +775,13 @@ function ProjectPage() {
             <section id="validation" className="py-10 border-t border-white/10">
               <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                 <h2 className="text-xl font-display font-bold">Validation</h2>
-                <ul className="mt-4 list-disc pl-5 space-y-2 text-emerald-100/85">
-                  {p.validation.map((x, i) => <li key={i}>{x}</li>)}
+                <ul className="mt-4 space-y-2 text-emerald-100/85">
+                  {p.validation.map((x, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span aria-hidden="true">✅</span>
+                      <span>{x}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </section>
@@ -714,8 +791,13 @@ function ProjectPage() {
             <section id="results" className="py-10 border-t border-white/10">
               <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                 <h2 className="text-xl font-display font-bold">Outcomes</h2>
-                <ul className="mt-4 list-disc pl-5 space-y-2 text-emerald-100/85">
-                  {p.outcome.map((x, i) => <li key={i}>{x}</li>)}
+                <ul className="mt-4 space-y-2 text-emerald-100/85">
+                  {p.outcome.map((x, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span aria-hidden="true">📈</span>
+                      <span>{x}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </section>
@@ -731,6 +813,33 @@ function ProjectPage() {
               </div>
             </section>
           ) : null}
+
+          {Array.isArray(p.analysis) && p.analysis.length ? (
+            <section id="analysis" className="py-10 border-t border-white/10">
+              <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                <h2 className="text-xl font-display font-bold">{p.analysisTitle || 'Calculations & Analysis'}</h2>
+                <div className="mt-6 space-y-10">
+                  {p.analysis.map((blk, i) => (
+                    <div key={i}>
+                      {blk.heading ? <h3 className="text-lg font-semibold">{blk.heading}</h3> : null}
+                      {Array.isArray(blk.paragraphs) && blk.paragraphs.map((para, j) => (
+                        <p key={j} className="mt-3 text-emerald-100/90">{para}</p>
+                      ))}
+                      {Array.isArray(blk.images) && blk.images.length ? (
+                        <div className={`mt-4 grid gap-4 ${blk.images.length > 1 ? 'grid-cols-1 sm:grid-cols-2' : ''}`}>
+                          {blk.images.map((src, k) => (
+                            <figure key={k} className="overflow-hidden rounded-3xl ring-1 ring-white/10 bg-white/5">
+                              <img src={src} alt={`${p.title} analysis image ${i + 1}-${k + 1}`} className="w-full aspect-[16/10] md:aspect-[16/9] object-cover" />
+                            </figure>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          ) : null}
         </>
       )}
 
@@ -739,9 +848,14 @@ function ProjectPage() {
         <section id="contrib" className="py-12 border-t border-white/10">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <h2 className="text-xl font-display font-bold">Key Contributions</h2>
-            <ul className="mt-4 list-disc pl-5 space-y-2 text-emerald-100/85">
-              {p.bullets.map((b, i) => <li key={i}>{b}</li>)}
-            </ul>
+            <ul className="mt-4 space-y-2 text-emerald-100/85">
+            {p.bullets.map((b, i) => (
+              <li key={i} className="flex items-start gap-2">
+                <span aria-hidden="true">🟢</span>
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
           </div>
         </section>
       ) : null}
