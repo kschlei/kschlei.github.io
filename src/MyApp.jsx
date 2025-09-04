@@ -163,7 +163,7 @@ const PROJECTS = [
     title: "1/10‑Scale F1 RC — 3D‑Printed Chassis & Control",
     role: "Mech • Elec • Firmware",
     img: "/projects/rc-car.jpg",
-    gallery: ["/projects/rc-car.jpg", "/projects/rc-car-2.jpg"],
+    extraImageBelowSolution: "/projects/rc-f1-model.jpg",
     summary:
       "Differential rear axle, nose‑mounted servo, brushless powertrain, Arduino control.",
     objective:
@@ -773,6 +773,20 @@ function ProjectPage() {
               </div>
             </section>
           ) : null}
+
+{/* RC-F1: extra image below Solution */}
+{p.slug === "rc-f1" && p.extraImageBelowSolution ? (
+  <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div className="mt-6 overflow-hidden rounded-3xl ring-1 ring-white/10 bg-white/5">
+      <img
+        src={p.extraImageBelowSolution}
+        alt={`${p.title} — extra`}
+        className="w-full aspect-[16/10] md:aspect-[16/9] object-cover"
+        loading="lazy"
+      />
+    </div>
+  </div>
+) : null}
 
           {Array.isArray(p.validation) && p.validation.length ? (
             <section id="validation" className="py-10 border-t border-white/10">
