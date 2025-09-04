@@ -26,7 +26,7 @@ const LINKS = {
   email: "mailto:",
   github: "https://github.com/kschlei",
   linkedin: "https://www.linkedin.com/in/kiraschlei/",
-  resume: "#",
+  resume: "/public/ResumeW2026.pdf",
 };
 
 const PROJECTS = [
@@ -163,6 +163,7 @@ const PROJECTS = [
     title: "1/10‑Scale F1 RC — 3D‑Printed Chassis & Control",
     role: "Mech • Elec • Firmware",
     img: "/projects/rc-car.jpg",
+    gallery: ["/projects/rc-car.jpg", "/projects/rc-car-2.jpg"],
     summary:
       "Differential rear axle, nose‑mounted servo, brushless powertrain, Arduino control.",
     objective:
@@ -256,7 +257,8 @@ const EXPERIENCE = [
     period: "Sep 2024 – Dec 2024",
     bullets: [
       "Servo/pneumatic/electromagnetic stations for automated assembly.",
-      "Three vision inspection systems with sensors/cameras & fixtures.",
+      "Worked with and engineered end-of-arm tooling (EOAT) for robotic grippers in SolidWorks; validated kinematics/clearances with Motion.",
+      "Designed three computer vision inspection systems with sensors/cameras & fixtures.",
     ],
   },
   {
@@ -265,6 +267,7 @@ const EXPERIENCE = [
     period: "Feb 2024 – Apr 2024",
     bullets: [
       "Converted legacy AutoCAD isolators to manufacturable SolidWorks designs with GD&T.",
+      "Performed FEA on vibration isolators and mounting brackets to validate load ratings.",
     ],
   },
 ];
