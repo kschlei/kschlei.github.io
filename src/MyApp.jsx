@@ -491,7 +491,7 @@ function HomePage() {
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between gap-4">
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Projects</h2>
-              <a href="#contact" className="text-sm inline-flex items-center gap-1 hover:underline">Work with me →</a>
+              <a href="#contact" className="text-sm inline-flex items-center gap-1 hover:underline">Contact me →</a>
             </div>
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
               {PROJECTS.map((p, i) => (
@@ -595,7 +595,7 @@ function HomePage() {
         <section id="contact" className="py-12 sm:py-16 border-t border-white/10">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Contact</h2>
-            <p className="mt-3 text-emerald-100/90 max-w-2xl">Interested in collaborating or chatting about your project? Reach out anytime.</p>
+            <p className="mt-3 text-emerald-100/90 max-w-2xl">Feel free to reach out at any time about my project or inquiries!.</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a href={LINKS.email} className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400 text-emerald-950 px-4 py-2 text-sm font-semibold shadow hover:brightness-110">
                 <Icon name="mail" /> Email
