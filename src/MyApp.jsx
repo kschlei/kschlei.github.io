@@ -279,6 +279,7 @@ const PROJECTS = [
       "Improved steering response; reduced overshoot in slalom test (qualitative driver feedback + tighter path trace).",
       "Runtime per pack increased ~10% after aero/drag refinements + gearing tweak.",
     ],
+    githubRepo: "https://github.com/kabeercheema/RC-F1-Car-Firmware",
     tools: [
       "SolidWorks (CAD + CFD)",
       "Arduino (C++)",
@@ -837,6 +838,20 @@ function ProjectPage() {
               {p.tags?.length ? (
                 <div className="mt-4 flex flex-wrap gap-2">{p.tags.map((t, i) => <Tag key={i}>{t}</Tag>)}</div>
               ) : null}
+              {p.githubRepo && (
+                <div className="mt-6">
+                  <a 
+                    href={p.githubRepo} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400 text-emerald-950 px-4 py-2 text-sm font-semibold shadow hover:brightness-110 hover:scale-105 hover:shadow-lg hover:shadow-emerald-400/25 transition-all duration-300 group"
+                  >
+                    <Icon name="github" className="group-hover:rotate-12 transition-transform duration-300" />
+                    <span>View Source Code</span>
+                    <Icon name="external" className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                  </a>
+                </div>
+              )}
             </div>
 
             {/* Media below title */}
