@@ -103,7 +103,6 @@ const PROJECTS = [
     problem: [
       "Off the shelf DC Combiners did not meet footprint nor cost requirements.",
       "Many introduced excessive voltage drop or thermal hotspots under continuous current.",
-      "Mixed supplier data on allowable temperature rise across bus joints (derating ambiguity).",
       "Need to pass CSA inspection first build with minimal rework (compressed schedule).",
     ],
     solution: [
@@ -112,21 +111,17 @@ const PROJECTS = [
       "Selected components and calculated bus bar spacing, lug torque specs, and voltage clearance to meet UL 891 and UL 9540.",
       "Conducted insulation integrity (hipot) tests across high-voltage paths.",
       "Collaborated with the electrical team to route cable lugs, ensure enclosure IP rating, and pass CSA inspection.",
-      "Added sacrificial test points + clear labeling for commissioning & future troubleshooting.",
-      "Specified joint prep (abrasion + antioxidant compound) to reduce contact resistance drift over life.",
     ],
     outcome: [
       "Cabinet passed UL 891 certification for switchgear.",
       "Achieved compact layout with 1500VDC continuous rating and 400A current handling.",
       "Enhanced system safety via reliable pre-charge circuit and fault isolation paths.",
-      "< 25°C rise on primary bus joints at 400A (ambient 23°C test).",
       "< 1% voltage drop end‑to‑end at rated current (measured vs calc within 0.2%).",
       "Zero rework items cited during CSA field inspection (first‑pass acceptance).",
     ],
     validation: [
       "Thermal probe array (8x K‑type) on hottest predicted joints → correlated within 3.5°C to FEA.",
       "Hipot 3 kVDC / 60 s between isolated sections (0 leakage events).",
-      "Milliohm measurements of bolted joints before/after torque cycling (ΔR < 8%).",
       "IR camera sweep after 2 hr soak @ 400A showed no localized hotspots > design margin.",
     ],
     tools: [
