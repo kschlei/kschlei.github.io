@@ -251,7 +251,7 @@ const PROJECTS = [
     img: "/projects/rc-car.jpg",
     extraImageBelowSolution: "/projects/rc-f1-model.jpg",
     summary:
-      "Differential rear axle, nose‑mounted servo, brushless powertrain, Arduino control.",
+      "Differential rear axle, nose‑mounted servo, brushless powertrain, Arduino control, CFD, aerodynamic study.",
     objective:
       "Design and build a functional 1/10‑scale Formula 1 RC car from scratch, integrating mechanical design and embedded systems.",
     problem: [
