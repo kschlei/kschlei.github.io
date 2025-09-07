@@ -26,7 +26,7 @@ const LINKS = {
   email: "mailto:",
   github: "https://github.com/kschlei",
   linkedin: "https://www.linkedin.com/in/kiraschlei/",
-  resume: "https://drive.google.com/drive/folders/1iDe90j6VvJdKUgGVZBUIfWZ0jXXbcZ43?usp=sharing",
+  resume: "/ResumeW2026.pdf",
 };
 
 const PROJECTS = [
