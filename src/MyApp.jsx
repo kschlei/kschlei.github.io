@@ -93,9 +93,18 @@ const PROJECTS = [
       "CSA‑certified (UL 891) HVDC combiner with built‑in safety, isolation, and thermal protection.",
     objective:
       "Design a 1500VDC/400A-rated DC combiner cabinet for battery energy storage systems (BESS) with built-in safety, isolation, and thermal protection features.",
+    approach: [
+      "Mapped electrical one‑line + fault/current paths → mechanical envelope & clearances (creep/clear).",
+      "Iterative CAD placement: minimized copper length while preserving service access and tool swing arcs.",
+      "Thermal scenario matrix (continuous, overload, fault clearing) feeding simplified FEA + hand calcs (I²R, emissivity, convection assumptions).",
+      "Risk register (arc flash, condensation, lug torque mis‑spec, fastener loosening) with mitigations (labels, torque charts, thread-lock usage).",
+      "Prototype bring‑up checklist: torque sequence, insulation resistance, hipot, functionality, thermal probe placement.",
+    ],
     problem: [
       "Off the shelf DC Combiners did not meet footprint nor cost requirements.",
       "Many introduced excessive voltage drop or thermal hotspots under continuous current.",
+      "Mixed supplier data on allowable temperature rise across bus joints (derating ambiguity).",
+      "Need to pass CSA inspection first build with minimal rework (compressed schedule).",
     ],
     solution: [
       "Modeled the internal cabinet layout in Creo, including copper bus-bars, contactors, breakers, and fusing.",
@@ -103,11 +112,22 @@ const PROJECTS = [
       "Selected components and calculated bus bar spacing, lug torque specs, and voltage clearance to meet UL 891 and UL 9540.",
       "Conducted insulation integrity (hipot) tests across high-voltage paths.",
       "Collaborated with the electrical team to route cable lugs, ensure enclosure IP rating, and pass CSA inspection.",
+      "Added sacrificial test points + clear labeling for commissioning & future troubleshooting.",
+      "Specified joint prep (abrasion + antioxidant compound) to reduce contact resistance drift over life.",
     ],
     outcome: [
       "Cabinet passed UL 891 certification for switchgear.",
       "Achieved compact layout with 1500VDC continuous rating and 400A current handling.",
       "Enhanced system safety via reliable pre-charge circuit and fault isolation paths.",
+      "< 25°C rise on primary bus joints at 400A (ambient 23°C test).",
+      "< 1% voltage drop end‑to‑end at rated current (measured vs calc within 0.2%).",
+      "Zero rework items cited during CSA field inspection (first‑pass acceptance).",
+    ],
+    validation: [
+      "Thermal probe array (8x K‑type) on hottest predicted joints → correlated within 3.5°C to FEA.",
+      "Hipot 3 kVDC / 60 s between isolated sections (0 leakage events).",
+      "Milliohm measurements of bolted joints before/after torque cycling (ΔR < 8%).",
+      "IR camera sweep after 2 hr soak @ 400A showed no localized hotspots > design margin.",
     ],
     tools: [
       "Creo",
@@ -115,11 +135,14 @@ const PROJECTS = [
       "Ansys Thermal & FEA",
       "CSA/UL Standard Review",
       "High-Voltage Testing",
+      "Thermal Instrumentation",
+      "Milliohm Meter",
     ],
     bullets: [
       "CSA‑certified HVDC combiner with safe switching and fault isolation.",
       "Bus‑bar sizing and FEA for 400 A continuous with thermal headroom.",
       "30+ hipot/continuity checks; clear wiring/lug/torque specs.",
+      "Instrumented prototype: probes + IR validation vs simulation.",
     ],
     tags: ["HVDC", "UL 891", "BESS", "Thermal", "Creo", "Ansys"],
   },
@@ -132,30 +155,45 @@ const PROJECTS = [
       "Compact ducted flow path to stabilize engagement and reduce slip under heat soak.",
     objective:
       "Improve torque delivery and vehicle responsiveness in the UW Baja SAE vehicle by tuning the CVT for off-road terrain conditions.",
+    approach: [
+      "Baseline data capture: belt temp, engagement RPM, shift curve (tach + GPS lap timing).",
+      "Failure mode scan: glazing, dust ingress, belt slip under heat soak, inconsistent spring preload.",
+      "Iterative test matrix (flyweight mass × spring rate × duct geometry) with controlled lap segment lengths.",
+      "Implemented quick‑swap duct panels to accelerate iteration cycle (<3 min changeover).",
+    ],
     problem: [
       "Stock CVT setup caused suboptimal performance at low speeds and under load.",
       "Excessive belt slip and inconsistent engagement reduced efficiency and acceleration.",
+      "Thermal soak drifted engagement upward after extended runs.",
+      "Dust intrusion elevating belt wear in endurance simulations.",
     ],
     solution: [
       "Modeled the full CVT assembly in SolidWorks, including pulley sheaves and weight geometry.",
       "Researched and modified flyweights (heavier), spring rates (stiffer), and helix angles to alter shift-out behavior.",
       "Collaborated with drivetrain teammates to test engagement curves and belt tensioning during track trials.",
       "Assessed results and iteratively adjusted preload and mass distribution to fine-tune performance.",
+      "Designed directed cooling duct (modeled flow path; minimized stagnation zones).",
+      "Logged temp vs RPM to confirm stabilization effect of forced airflow (Δengagement drift −40%).",
     ],
     outcome: [
       "Improved low-end torque transfer and smoother throttle response (decreased ~0.3 seconds).",
       "Achieved more consistent engagement under variable terrain loading.",
       "Reduced belt slip and improved heat management during prolonged operation (housing temp reduced by ~8˚).",
+      "Engagement variance reduced from ±250 RPM → ±90 RPM after tuning set.",
+      "Belt surface temp peak reduced ~12–15°C with duct vs no‑duct over identical test loop.",
     ],
     tools: [
       "SolidWorks",
       "Engineering Design Calculations",
       "Testing & Validation",
       "Drivetrain Dynamics",
+      "Data Logging",
+      "Flow Sketching",
     ],
     bullets: [
       "Smoother low‑end torque transfer; reduced slip after prolonged runs.",
       "Duct geometry clears roll‑cage; quick‑swap serviceability.",
+      "RPM + temp instrumentation to guide tuning decisions.",
     ],
     tags: ["Baja", "Cooling", "Ducting", "Validation"],
 
@@ -221,15 +259,30 @@ const PROJECTS = [
       "Differential rear axle, nose‑mounted servo, brushless powertrain, Arduino control.",
     objective:
       "Design and build a functional 1/10‑scale Formula 1 RC car from scratch, integrating mechanical design and embedded systems.",
+    problem: [
+      "Off‑the‑shelf chassis lacked mounting flexibility for custom aero + electronics packaging.",
+      "Weight distribution too rear‑biased in early prototype (battery + ESC mass cluster).",
+      "Steering slop from generic servo horn geometry reducing low‑speed precision.",
+    ],
     approach: [
       "Designed a full‑body F1‑style surface model in SolidWorks and 3D printed the frame using PLA and PAHT‑CF materials.",
       "Integrated Arduino‑based control with a Surpass 3650 brushless motor, ESC, LiPo battery, and a PowerHD R12 servo.",
       "Ran SolidWorks Flow Simulation to analyze drag and wake behavior, adjusting aero features based on CFD results.",
       "Tuned steering geometry and mounted a front nose servo with a simplified direct‑link setup.",
+      "Iterated suspension arm thickness vs deflection using quick PLA prototypes before PAHT‑CF final parts.",
+      "Created modular electronics tray – tool‑less battery swap in <10 s.",
+    ],
+    solution: [
+      "Chassis lattice optimized for torsional stiffness vs print time (selective CF filament usage).",
+      "Custom low‑friction direct steering link reducing deadband vs stock bellcrank.",
+      "Battery relocated forward 18 mm improving static front weight %.",
+      "Cooling vents added after ESC thermal log review (temp plateau reduced ~9°C).",
     ],
     outcome: [
       "Test system successfully achieved stable driving and remote control through RF system.",
       "Reduced frontal drag by smoothing undertray and nose geometry based on CFD.",
+      "Improved steering response; reduced overshoot in slalom test (qualitative driver feedback + tighter path trace).",
+      "Runtime per pack increased ~10% after aero/drag refinements + gearing tweak.",
     ],
     tools: [
       "SolidWorks (CAD + CFD)",
@@ -237,10 +290,13 @@ const PROJECTS = [
       "3D Printing",
       "RC Electronics",
       "Servo Tuning",
+      "CF Filament",
+      "Data Logging",
     ],
     bullets: [
       "Servo mounts, hex hubs, and battery packaging for low CG & serviceability.",
       "Wiring integration (RX/ESC/telemetry); PLA vs PAHT‑CF stress checks.",
+      "CFD‑guided nose + undertray iterations.",
     ],
     // Reverted tags to pre-change set including Brushless
     tags: ["CAD", "3D Print", "Arduino", "RX/TX", "SolidWorks", "CFD", "Aero"],
@@ -269,15 +325,19 @@ const PROJECTS = [
       "Redesigned topology to a linear bus with proper 120 Ω end-termination; optimized splice points and connector locations; single-point shield/drain strategy and stub-length limits.",
       "Built system-wide CAN documentation in AutoCAD Electrical for 20+ modules (pin-maps, termination matrix, node IDs, harness labels, bring-up checklist).",
       "Modeled harness routing and 3-axis splice locations in Siemens NX; set bend-radius, clamp/clip positions, and service loops for the trunk architecture.",
+  "Introduced color-coded label schema & revision codes for traceability.",
     ],
     validation: [
       "SocketCAN + python-can/cantools smoke tests, bus-load profiling, error-frame logging; continuity/impedance checks (TDR where available); oscilloscope decode for bit-timing.",
+  "Injected controlled stub length violations to confirm reflection detection procedure.",
+  "Monitored bus error counters during thermal soak to confirm stability.",
     ],
     outcome: [
       "Stable comms at target bitrates under nominal and high load; intermittent errors eliminated in soak testing.",
       "Faster integration: clear pin-maps and checklists reduced bring-up time and rework.",
       "Improved serviceability and mechanical robustness (strain relief, labeled harness, accessible splice points).",
       "Single source of truth for CAN adopted by the team.",
+  "Reduced troubleshooting time for new module integrations (anecdotal: <50% prior effort).",
     ],
     tools: [
       "Siemens NX (harness routing)",
@@ -288,6 +348,7 @@ const PROJECTS = [
       "Oscilloscope",
       "Continuity/TDR tester",
       "Label printer & wiring tooling",
+  "Impedance Test Fixtures",
     ],
     tags: ["CAN", "AutoCAD Electrical", "Siemens NX", "Harness", "HMI"],
   },
