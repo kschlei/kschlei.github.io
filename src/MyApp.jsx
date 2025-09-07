@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useState, useRef } from "react";
 import { BrowserRouter, Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
 
 /**
@@ -7,8 +7,61 @@ import { BrowserRouter, Routes, Route, Link, useParams, useNavigate } from "reac
  * • Home page + dedicated /projects/:slug pages
  * • Project pages show big image below title (Combiner uses two portrait images)
  * • Longform sections (Objective/Problem/Approach/Solution/Outcomes/Tools) render when present
- * • TailwindCSS (Evergreen theme)
+ * • TailwindCSS (Evergreen              <div className="mt-2 text-emerald-200/80 max-w-2xl space-y-3">
+                <p className={`transition-all duration-700 delay-200 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                  Hi! I'm an aspiring <span className="text-emerald-300 font-bold">vehicle systems and design</span> engineer and <span className="text-purple-300 font-bold">Mechatronics student</span> at the University of Waterloo.
+                </p>
+                <p className={`transition-all duration-700 delay-400 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                  <strong>Current focus:</strong> <span className="text-yellow-300 font-bold">⚡ high-voltage power systems</span> · <span className="text-cyan-300 font-bold">📡 CAN/CAN-FD networking</span> · <span className="text-lime-300 font-bold">🌬️ aerodynamic chassis</span> (CAD → CFD → prototype).
+                </p>
+                <p className={`transition-all duration-700 delay-600 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                  <strong>How I work:</strong> <span className="text-emerald-300 font-bold">design → instrument → validate → iterate</span>, with concise updates and reproducible tests 📈.<br/>
+                  <strong>What I bring to a team:</strong> <span className="text-blue-300 font-bold">reliable builds</span> and a teammate who's <span className="text-purple-300 font-bold"><span className="text-cyan-300 font-bold">coachable, curious, and outcome-driven</span></span>.
+                </p>
+              </div>e)
+ * • Enhanced with smooth animations and interactions
  */
+
+// Animation utilities
+const useIntersectionObserver = (options = {}) => {
+  const [isIntersecting, setIsIntersecting] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsIntersecting(entry.isIntersecting);
+    }, { threshold: 0.1, ...options });
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, [options]);
+
+  return [ref, isIntersecting];
+};
+
+const useStaggeredAnimation = (itemCount, delay = 100) => {
+  const [animatedItems, setAnimatedItems] = useState(new Set());
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (isVisible) {
+      const timeouts = [];
+      for (let i = 0; i < itemCount; i++) {
+        timeouts.push(
+          setTimeout(() => {
+            setAnimatedItems(prev => new Set([...prev, i]));
+          }, i * delay)
+        );
+      }
+      return () => timeouts.forEach(clearTimeout);
+    }
+  }, [isVisible, itemCount, delay]);
+
+  return [setIsVisible, animatedItems];
+};
 
 // ------------------------------
 // Content
@@ -412,6 +465,25 @@ function HomePage() {
     []
   );
 
+  const [heroRef, heroVisible] = useIntersectionObserver();
+  const [projectsRef, projectsVisible] = useIntersectionObserver();
+  const [setProjectsAnimationVisible, animatedProjects] = useStaggeredAnimation(PROJECTS.length, 150);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    if (projectsVisible) {
+      setProjectsAnimationVisible(true);
+    }
+  }, [projectsVisible, setProjectsAnimationVisible]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className="relative isolate min-h-screen text-emerald-50">{/* isolate fixes overlap stacking issues */}
       {/* Background: evergreen gradient + glows + subtle grid (z behind) */}
@@ -419,65 +491,86 @@ function HomePage() {
       <div className="pointer-events-none fixed inset-0 -z-40 bg-[radial-gradient(75%_50%_at_0%_0%,rgba(16,185,129,0.20),transparent_60%),radial-gradient(60%_45%_at_100%_100%,rgba(52,211,153,0.18),transparent_60%)]" />
       <div className="pointer-events-none fixed inset-0 -z-30 opacity-10 bg-[linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] bg-[size:24px_24px]" />
 
-      {/* NAVBAR (sticky, like original) */}
-      <header className="sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-white/5 bg-white/5 border-b border-white/10">
+      {/* NAVBAR (sticky with scroll animations) */}
+      <header className={`sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-white/5 bg-white/5 border-b border-white/10 transition-all duration-300 ${
+        scrolled ? 'bg-emerald-950/90 shadow-lg shadow-emerald-950/20' : ''
+      }`}>
         <nav className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-          <a href="#top" className="font-semibold tracking-tight">Kira</a>
+          <a href="#top" className={`font-semibold tracking-tight transition-all duration-300 hover:scale-110 ${
+            scrolled ? 'text-emerald-300' : ''
+          }`}>Kira</a>
           <div className="flex items-center gap-3 text-sm">
-            <a href="#projects" className="hover:underline">Projects</a>
-            <a href="#experience" className="hover:underline">Experience</a>
-            <a href="#skills" className="hover:underline">Skills</a>
-            <a href="#contact" className="hover:underline">Contact</a>
+            <a href="#projects" className="hover:underline hover:text-emerald-300 transition-all duration-300 hover:scale-105">Projects</a>
+            <a href="#experience" className="hover:underline hover:text-emerald-300 transition-all duration-300 hover:scale-105">Experience</a>
+            <a href="#skills" className="hover:underline hover:text-emerald-300 transition-all duration-300 hover:scale-105">Skills</a>
+            <a href="#contact" className="hover:underline hover:text-emerald-300 transition-all duration-300 hover:scale-105">Contact</a>
           </div>
         </nav>
       </header>
 
-      {/* HERO (original layout style, green styling) */}
-      <section id="top" className="relative z-10">
+      {/* HERO (animated entrance and floating photo) */}
+      <section id="top" className="relative z-10" ref={heroRef}>
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-            {/* Text block (left, spans 2) */}
-            <div className="md:col-span-2">
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">{PROFILE.name}</h1>
+            {/* Text block (left, spans 2) - animated slide in from left */}
+            <div className={`md:col-span-2 transition-all duration-1000 ease-out ${
+              heroVisible 
+                ? 'opacity-100 translate-x-0' 
+                : 'opacity-0 -translate-x-12'
+            }`}>
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight bg-gradient-to-r from-emerald-500 via-blue-400 to-purple-500 bg-clip-text text-transparent">
+                {PROFILE.name}
+              </h1>
               <p className="mt-3 text-lg text-emerald-100/90">{PROFILE.role} — {PROFILE.line2}</p>
               <div className="mt-2 text-emerald-200/80 max-w-2xl space-y-3">
-                <p>I’m an aspiring vehicle systems and design engineer and Mechatronics student at the University of Waterloo 🤖. I like turning ideas into working, testable hardware—pairing clean design with the tooling, data, and docs to prove it 🛠️📝. I work fast, communicate clearly, and play well with cross-disciplinary teams 🤝.</p>
+                <p>Hi! I’m an aspiring <span className="text-emerald-300 font-bold">vehicle systems and design</span> engineer and <span className="text-purple-300 font-bold">Mechatronics student</span> at the University of Waterloo.</p>
                 <p><strong>Current focus:</strong> ⚡ high-voltage power systems · 📡 CAN/CAN-FD networking · 🌬️ aerodynamic chassis (CAD → CFD → prototype).</p>
-                <p><strong>How I work:</strong> design → instrument → validate → iterate, with concise updates and reproducible tests 📈.<br/><strong>What you get:</strong> reliable builds and a teammate who’s coachable, curious, and outcome-driven.</p>
+                <p><strong>How I work:</strong> design → instrument → validate → iterate, with concise updates and reproducible tests 📈.<br/><strong>What I bring to a team:</strong> reliable builds and a teammate who’s <span className="text-cyan-300 font-bold">coachable, curious, and outcome-driven</span>.</p>
               </div>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <a href={LINKS.resume} className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400 text-emerald-950 px-4 py-2 text-sm font-semibold shadow hover:brightness-110">
+              <div className={`mt-6 flex flex-wrap gap-3 transition-all duration-800 delay-800 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+                <a href={LINKS.resume} className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400 text-emerald-950 px-4 py-2 text-sm font-semibold shadow hover:brightness-110 hover:scale-105 hover:shadow-lg hover:shadow-emerald-400/25 transition-all duration-300 group">
                   <span>Download Résumé</span>
-                  <Icon name="external" className="w-4 h-4" />
+                  <Icon name="external" className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </a>
-                <a href={LINKS.github} className="inline-flex items-center gap-2 rounded-2xl ring-1 ring-white/10 px-4 py-2 text-sm hover:bg-white/10">
-                  <Icon name="github" />
+                <a href={LINKS.github} className="inline-flex items-center gap-2 rounded-2xl ring-1 ring-white/10 px-4 py-2 text-sm hover:bg-white/10 hover:scale-105 hover:ring-white/20 transition-all duration-300 group">
+                  <Icon name="github" className="group-hover:rotate-12 transition-transform duration-300" />
                   <span>GitHub</span>
                 </a>
-                <a href={LINKS.linkedin} className="inline-flex items-center gap-2 rounded-2xl ring-1 ring-white/10 px-4 py-2 text-sm hover:bg-white/10">
-                  <Icon name="linkedin" />
+                <a href={LINKS.linkedin} className="inline-flex items-center gap-2 rounded-2xl ring-1 ring-white/10 px-4 py-2 text-sm hover:bg-white/10 hover:scale-105 hover:ring-white/20 transition-all duration-300 group">
+                  <Icon name="linkedin" className="group-hover:scale-110 transition-transform duration-300" />
                   <span>LinkedIn</span>
                 </a>
               </div>
-              <div className="mt-4 text-sm text-emerald-200/70">
+              <div className={`mt-4 text-sm text-emerald-200/70 transition-all duration-900 delay-1000 ${heroVisible ? 'opacity-100' : 'opacity-0'}`}>
                 <span className="mr-3">{PROFILE.current}</span>
                 <span>• {PROFILE.location}</span>
               </div>
             </div>
 
-            {/* Portrait / Accent card (right) */}
-            <div className="md:col-span-1">
-              <div className="relative overflow-hidden rounded-3xl ring-1 ring-white/10 p-2 bg-white/5">
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-200/30 via-transparent to-teal-200/30 pointer-events-none" />
+            {/* Portrait / Accent card (right) - animated slide in from right with floating effect */}
+            <div className={`md:col-span-1 transition-all duration-1000 delay-300 ease-out ${
+              heroVisible 
+                ? 'opacity-100 translate-x-0' 
+                : 'opacity-0 translate-x-12'
+            }`}>
+              <div className="relative overflow-hidden rounded-3xl ring-1 ring-white/10 p-2 bg-white/5 hover:ring-white/20 transition-all duration-500 group animate-float">
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-200/30 via-transparent to-teal-200/30 pointer-events-none group-hover:from-emerald-200/40 group-hover:to-teal-200/40 transition-all duration-500" />
                 <div className="relative rounded-2xl overflow-hidden">
                   {PROFILE.photo ? (
-                    <img src={PROFILE.photo} alt="Portrait" className="w-full aspect-square object-cover" />
+                    <img 
+                      src={PROFILE.photo} 
+                      alt="Portrait" 
+                      className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
+                    />
                   ) : (
-                    <div className="w-full aspect-square bg-gradient-to-br from-emerald-400 to-teal-400 grid place-items-center">
-                      <span className="text-4xl font-semibold text-emerald-950">{initials}</span>
+                    <div className="w-full aspect-square bg-gradient-to-br from-emerald-400 to-teal-400 grid place-items-center group-hover:from-emerald-300 group-hover:to-teal-300 transition-all duration-500">
+                      <span className="text-4xl font-semibold text-emerald-950 group-hover:scale-110 transition-transform duration-300">{initials}</span>
                     </div>
                   )}
                 </div>
+                {/* Floating particles effect */}
+                <div className="absolute top-4 right-4 w-2 h-2 bg-emerald-300/60 rounded-full animate-ping" />
+                <div className="absolute bottom-6 left-6 w-1 h-1 bg-teal-300/80 rounded-full animate-pulse" />
               </div>
             </div>
           </div>
@@ -487,17 +580,22 @@ function HomePage() {
       {/* CONTENT SECTIONS (raised above bg) */}
       <main className="relative z-10">
         {/* Projects */}
-        <section id="projects" className="py-12 sm:py-16">
+        <section id="projects" className="py-12 sm:py-16" ref={projectsRef}>
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className="flex items-end justify-between gap-4">
+            <div className={`flex items-end justify-between gap-4 transition-all duration-800 ${projectsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Projects</h2>
-              <a href="#contact" className="text-sm inline-flex items-center gap-1 hover:underline">Contact me →</a>
+              <a href="#contact" className="text-sm inline-flex items-center gap-1 hover:underline transition-all duration-300 hover:translate-x-1">Contact me →</a>
             </div>
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
               {PROJECTS.map((p, i) => (
                 <article
                   key={i}
-                  className="group relative overflow-hidden rounded-3xl ring-1 ring-white/10 bg-white/5 shadow-sm hover:bg-white/10 transition-colors flex flex-col"
+                  className={`group relative overflow-hidden rounded-3xl ring-1 ring-white/10 bg-white/5 shadow-sm hover:bg-white/10 hover:ring-white/20 hover:scale-[1.02] hover:shadow-xl transition-all duration-500 flex flex-col ${
+                    animatedProjects.has(i) 
+                      ? 'opacity-100 translate-y-0' 
+                      : 'opacity-0 translate-y-8'
+                  }`}
+                  style={{ transitionDelay: `${i * 150}ms` }}
                 >
                   <div className="aspect-[16/9] w-full overflow-hidden">
                     {p.img ? (
@@ -505,10 +603,10 @@ function HomePage() {
                         src={p.img}
                         alt={`${p.title} — ${p.role}`}
                         loading="lazy"
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                       />
                     ) : (
-                      <div className="h-full w-full bg-gradient-to-br from-emerald-300/30 to-teal-300/30" />
+                      <div className="h-full w-full bg-gradient-to-br from-emerald-300/30 to-teal-300/30 group-hover:from-emerald-300/40 group-hover:to-teal-300/40 transition-all duration-500" />
                     )}
                   </div>
 
@@ -534,10 +632,10 @@ function HomePage() {
                     <div className="mt-5 flex justify-end">
                       <Link
                         to={`/projects/${p.slug}`}
-                        className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400 text-emerald-950 px-4 py-2 text-sm font-semibold shadow hover:brightness-110"
+                        className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400 text-emerald-950 px-4 py-2 text-sm font-semibold shadow hover:brightness-110 hover:scale-105 hover:shadow-lg hover:shadow-emerald-400/25 transition-all duration-300 group/btn"
                       >
                         View project
-                        <Icon name="external" className="w-4 h-4" />
+                        <Icon name="external" className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
                       </Link>
                     </div>
                   </div>
@@ -902,6 +1000,64 @@ function ProjectPage() {
 // App (Router)
 // ------------------------------
 export default function App() {
+  // Add custom CSS animations
+  React.useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+      }
+      
+      @keyframes fade-in-up {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+      
+      .animate-fade-in-up {
+        animation: fade-in-up 0.8s ease-out 0.1s both;
+      }
+      
+      /* Smooth scroll behavior */
+      html {
+        scroll-behavior: smooth;
+      }
+      
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: rgba(16, 185, 129, 0.1);
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: rgba(52, 211, 153, 0.5);
+        border-radius: 4px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(52, 211, 153, 0.7);
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
