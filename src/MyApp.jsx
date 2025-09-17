@@ -154,7 +154,6 @@ const PROJECTS = [
       "Baseline data capture: belt temp, engagement RPM, shift curve (tach + GPS lap timing).",
       "Failure mode scan: glazing, dust ingress, belt slip under heat soak, inconsistent spring preload.",
       "Iterative test matrix (flyweight mass × spring rate × duct geometry) with controlled lap segment lengths.",
-      "Implemented quick‑swap duct panels to accelerate iteration cycle (<3 min changeover).",
     ],
     problem: [
       "Stock CVT setup caused suboptimal performance at low speeds and under load.",
@@ -261,7 +260,7 @@ const PROJECTS = [
     ],
     approach: [
       "Designed a full‑body F1‑style surface model in SolidWorks and 3D printed the frame using PLA and PAHT‑CF materials.",
-      "Integrated Arduino‑based control with a Surpass 3650 brushless motor, ESC, LiPo battery, and a PowerHD R12 servo.",
+      "Integrate Arduino‑based control with a Surpass 3650 brushless motor, ESC, LiPo battery, and a PowerHD R12 servo.",
       "Ran SolidWorks Flow Simulation to analyze drag and wake behavior, adjusting aero features based on CFD results.",
       "Tuned steering geometry and mounted a front nose servo with a simplified direct‑link setup.",    ],
     solution: [
@@ -320,16 +319,15 @@ const PROJECTS = [
   "Introduced color-coded label schema & revision codes for traceability.",
     ],
     validation: [
-      "SocketCAN + python-can/cantools smoke tests, bus-load profiling, error-frame logging; continuity/impedance checks (TDR where available); oscilloscope decode for bit-timing.",
+      "Worked with CAV team to validate signal integrity and smooth communication between systems.",
   "Injected controlled stub length violations to confirm reflection detection procedure.",
   "Monitored bus error counters during thermal soak to confirm stability.",
     ],
     outcome: [
-      "Stable comms at target bitrates under nominal and high load; intermittent errors eliminated in soak testing.",
       "Faster integration: clear pin-maps and checklists reduced bring-up time and rework.",
       "Improved serviceability and mechanical robustness (strain relief, labeled harness, accessible splice points).",
       "Single source of truth for CAN adopted by the team.",
-  "Reduced troubleshooting time for new module integrations (anecdotal: <50% prior effort).",
+  "Reduced troubleshooting time for new module integrations.",
     ],
     tools: [
       "Siemens NX (harness routing)",
