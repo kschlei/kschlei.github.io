@@ -263,12 +263,6 @@ const PROJECTS = [
       "Integrate Arduino‑based control with a Surpass 3650 brushless motor, ESC, LiPo battery, and a PowerHD R12 servo.",
       "Ran SolidWorks Flow Simulation to analyze drag and wake behavior, adjusting aero features based on CFD results.",
       "Tuned steering geometry and mounted a front nose servo with a simplified direct‑link setup.",    ],
-    solution: [
-      "Chassis lattice optimized for torsional stiffness vs print time (selective CF filament usage).",
-      "Battery relocated forward 18 mm improving static front weight %.",
-      "Cooling vents added after ESC thermal log review (temp plateau reduced ~9°C).",
-      "Integrated Arduino + RC system using Python/MATLAB to verify repeatable control response under load and summarize test runs.",
-    ],
     outcome: [
       "Current system is testing successfully (not yet in complete chassis), achieving stable driving and remote control through RF system.",
       "Reduced frontal drag by smoothing undertray and nose geometry based on CFD.",
