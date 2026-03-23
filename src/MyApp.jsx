@@ -570,7 +570,7 @@ function HomePage() {
               <div className="mt-2 text-emerald-200/80 max-w-2xl space-y-3">
                 <p>Hi! I’m an aspiring <span className="text-emerald-300 font-bold">vehicle systems and design</span> engineer and <span className="text-purple-300 font-bold">Mechatronics student</span> at the University of Waterloo.</p>
                 <p><strong>Current focus:</strong> ⚡ high-voltage power systems · 📡 CAN/CAN-FD networking · 🌬️ aerodynamic chassis (CAD → CFD → prototype).</p>
-               <p> Outside of projects, I love following motorsport, specifically IndyCar and Formula 1! 🏎️💨 I hope to attend a Grand Prix someday or even work behind the scenes! </p><br>
+               <p> Outside of projects, I love following motorsport, specifically IndyCar and Formula 1! 🏎️💨 I hope to attend a Grand Prix someday or even work behind the scenes! </p><br />
               </div>
               <div className={`mt-6 flex flex-wrap gap-3 transition-all duration-800 delay-800 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
                 <a href={LINKS.resume} className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400 text-emerald-950 px-4 py-2 text-sm font-semibold shadow hover:brightness-110 hover:scale-105 hover:shadow-lg hover:shadow-emerald-400/25 transition-all duration-300 group">
