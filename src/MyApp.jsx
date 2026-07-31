@@ -71,7 +71,7 @@ const PROFILE = {
   role: "Mechatronics @ Waterloo",
   line2: "Battery Systems • Robotics • Automotive",
   location: "Bay Area, California",
-  current: "Seating and Safety Engineer Intern @ Tesla Motors (Winter 2026)",
+  current: "Powertrain Engineer Intern - Mechanical @ Zipline (Fall 2026)",
   photo: "/me.jpg", // put a file in /public or use an external URL
 };
 
@@ -340,6 +340,16 @@ const PROJECTS = [
 
 const EXPERIENCE = [
   {
+    company: "Tesla – Seating and Safety",
+    title: "Interiors Engineering Intern",
+    period: "Jan 2026 – Apr 2026",
+    bullets: [
+      "Built an ESP32 encoder-drift test rig with custom sensors, C++ firmware, and MATLAB data collection.",
+      "Designed and iterated a CATIA leg-rest prototype through 10 ergonomic user trials.",
+      "Led H-point validation, six teardown investigations, and seating compliance test planning.",
+    ],
+  },
+  {
     company: "Generac Industrial Energy",
     title: "Electromechanical Battery Engineer Intern",
     period: "May 2025 – Aug 2025",
@@ -496,9 +506,22 @@ const Icon = ({ name, className = "w-5 h-5" }) => {
 };
 
 const Tag = ({ children }) => (
-  <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs text-emerald-200/90 ring-1 ring-emerald-400/20 bg-emerald-900/20">
+  <span className="hud-tag">
+    <span aria-hidden="true" className="hud-tag-dot" />
     {children}
   </span>
+);
+
+const HudSectionTitle = ({ code, eyebrow, children, aside }) => (
+  <div className="hud-section-title">
+    <div className="hud-section-index" aria-hidden="true">{code}</div>
+    <div>
+      <p className="hud-eyebrow">{eyebrow}</p>
+      <h2>{children}</h2>
+    </div>
+    <div className="hud-section-line" aria-hidden="true" />
+    {aside ? <div className="hud-section-aside">{aside}</div> : null}
+  </div>
 );
 
 // ------------------------------
@@ -530,158 +553,101 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="relative isolate min-h-screen text-emerald-50">{/* isolate fixes overlap stacking issues */}
-      {/* Background: evergreen gradient + glows + subtle grid (z behind) */}
-      <div className="fixed inset-0 -z-50 bg-gradient-to-br from-emerald-950 via-green-950 to-teal-950" />
-      <div className="pointer-events-none fixed inset-0 -z-40 bg-[radial-gradient(75%_50%_at_0%_0%,rgba(16,185,129,0.20),transparent_60%),radial-gradient(60%_45%_at_100%_100%,rgba(52,211,153,0.18),transparent_60%)]" />
-      <div className="pointer-events-none fixed inset-0 -z-30 opacity-10 bg-[linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] bg-[size:24px_24px]" />
+    <div className="jarvis-shell">
+      <div className="hud-backdrop" aria-hidden="true" />
+      <div className="hud-scanline" aria-hidden="true" />
 
-      {/* NAVBAR (sticky with scroll animations) */}
-      <header className={`sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-white/5 bg-white/5 border-b border-white/10 transition-all duration-300 ${
-        scrolled ? 'bg-emerald-950/90 shadow-lg shadow-emerald-950/20' : ''
-      }`}>
-        <nav className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-          <a href="#top" className={`font-semibold tracking-tight transition-all duration-300 hover:scale-110 ${
-            scrolled ? 'text-emerald-300' : ''
-          }`}>Kira</a>
-          <div className="flex items-center gap-3 text-sm">
-            <a href="#projects" className="hover:underline hover:text-emerald-300 transition-all duration-300 hover:scale-105">Projects</a>
-            <a href="#experience" className="hover:underline hover:text-emerald-300 transition-all duration-300 hover:scale-105">Experience</a>
-            <a href="#skills" className="hover:underline hover:text-emerald-300 transition-all duration-300 hover:scale-105">Skills</a>
-            <a href="#contact" className="hover:underline hover:text-emerald-300 transition-all duration-300 hover:scale-105">Contact</a>
+      <header className={`hud-header ${scrolled ? 'is-scrolled' : ''}`}>
+        <nav className="hud-nav" aria-label="Primary navigation">
+          <a href="#top" className="hud-brand" aria-label="Kira Schlei, home">
+            <span className="hud-brand-core">KS</span>
+            <span><b>KIRA</b><small>MECHATRONIC SYSTEMS</small></span>
+          </a>
+          <div className="hud-nav-links">
+            <a href="#projects"><span>01</span> Projects</a>
+            <a href="#experience"><span>02</span> Experience</a>
+            <a href="#skills"><span>03</span> Skills</a>
+            <a href="#contact"><span>04</span> Contact</a>
           </div>
+          <div className="hud-status"><i /> SYSTEM ONLINE</div>
         </nav>
       </header>
 
-      {/* HERO (animated entrance and floating photo) */}
-      <section id="top" className="relative z-10" ref={heroRef}>
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-            {/* Text block (left, spans 2) - animated slide in from left */}
-            <div className={`md:col-span-2 transition-all duration-1000 ease-out ${
-              heroVisible 
-                ? 'opacity-100 translate-x-0' 
-                : 'opacity-0 -translate-x-12'
-            }`}>
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight bg-gradient-to-r from-emerald-500 via-blue-400 to-purple-500 bg-clip-text text-transparent">
-                {PROFILE.name}
-              </h1>
-              <p className="mt-3 text-lg text-emerald-100/90">{PROFILE.role} — {PROFILE.line2}</p>
-              <div className="mt-2 text-emerald-200/80 max-w-2xl space-y-3">
-                <p>Hi! I’m an aspiring <span className="text-emerald-300 font-bold">vehicle systems and design</span> engineer and <span className="text-purple-300 font-bold">Mechatronics student</span> at the University of Waterloo.</p>
-                <p><strong>Current focus:</strong> ⚡ high-voltage power systems · 📡 CAN/CAN-FD networking · 🌬️ aerodynamic chassis (CAD → CFD → prototype).</p>
-                <p><strong> Outside of projects, I follow motorsport- especially IndyCar and Formula 1 🏎️💨 I hope to attend a Grand Prix someday or even work behind the scenes!   </strong> </p>
+      <section id="top" className="hud-hero" ref={heroRef}>
+        <div className="hud-frame-corners" aria-hidden="true" />
+        <div className="hud-hero-grid">
+          <div className={`hud-hero-copy ${heroVisible ? 'is-visible' : ''}`}>
+            <p className="hud-kicker"><span>SYS // 00</span> PORTFOLIO INTERFACE</p>
+            <h1>{PROFILE.name}</h1>
+            <p className="hud-role">{PROFILE.role} <b>/</b> {PROFILE.line2}</p>
+            <div className="hud-systems-console" aria-label="Systems visualization showing power, data, and mechanical channels online">
+              <div className="hud-console-head">
+                <span><i /> LIVE SYSTEM MAP</span>
+                <span>03 CHANNELS // SYNCHRONIZED</span>
               </div>
-              <div className={`mt-6 flex flex-wrap gap-3 transition-all duration-800 delay-800 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-                <a href={LINKS.resume} className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400 text-emerald-950 px-4 py-2 text-sm font-semibold shadow hover:brightness-110 hover:scale-105 hover:shadow-lg hover:shadow-emerald-400/25 transition-all duration-300 group">
-                  <span>Download Résumé</span>
-                  <Icon name="external" className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                </a>
-                <a href={LINKS.github} className="inline-flex items-center gap-2 rounded-2xl ring-1 ring-white/10 px-4 py-2 text-sm hover:bg-white/10 hover:scale-105 hover:ring-white/20 transition-all duration-300 group">
-                  <Icon name="github" className="group-hover:rotate-12 transition-transform duration-300" />
-                  <span>GitHub</span>
-                </a>
-                <a href={LINKS.linkedin} className="inline-flex items-center gap-2 rounded-2xl ring-1 ring-white/10 px-4 py-2 text-sm hover:bg-white/10 hover:scale-105 hover:ring-white/20 transition-all duration-300 group">
-                  <Icon name="linkedin" className="group-hover:scale-110 transition-transform duration-300" />
-                  <span>LinkedIn</span>
-                </a>
+              <div className="hud-waveform" aria-hidden="true">
+                {Array.from({ length: 22 }, (_, i) => <i key={i} />)}
+                <span className="hud-wave-sweep" />
               </div>
-              <div className={`mt-4 text-sm text-emerald-200/70 transition-all duration-900 delay-1000 ${heroVisible ? 'opacity-100' : 'opacity-0'}`}>
-                <span className="mr-3">{PROFILE.current}</span>
-                <span>• {PROFILE.location}</span>
+              <div className="hud-channel-grid">
+                <div><small>POWER BUS</small><strong>HVDC</strong><span>1500 V // ACTIVE</span></div>
+                <div><small>DRIVE SYSTEM</small><strong>POWERTRAIN</strong><span>TORQUE PATH // ACTIVE</span></div>
+                <div><small>MECH CORE</small><strong>CAD → TEST</strong><span>LOOP // ITERATING</span></div>
               </div>
             </div>
+            <div className="hud-actions">
+              <a href={LINKS.resume} className="hud-button hud-button-primary">Access résumé <Icon name="external" className="w-4 h-4" /></a>
+              <a href={LINKS.github} className="hud-button"><Icon name="github" /> GitHub</a>
+              <a href={LINKS.linkedin} className="hud-button"><Icon name="linkedin" /> LinkedIn</a>
+            </div>
+            <div className="hud-current">
+              <span className="hud-pulse" />
+              <div><small>CURRENT ASSIGNMENT</small><strong>{PROFILE.current}</strong></div>
+              <div><small>LOCATION</small><strong>{PROFILE.location}</strong></div>
+            </div>
+          </div>
 
-            {/* Portrait / Accent card (right) - animated slide in from right with floating effect */}
-            <div className={`md:col-span-1 transition-all duration-1000 delay-300 ease-out ${
-              heroVisible 
-                ? 'opacity-100 translate-x-0' 
-                : 'opacity-0 translate-x-12'
-            }`}>
-              <div className="relative overflow-hidden rounded-3xl ring-1 ring-white/10 p-2 bg-white/5 hover:ring-white/20 transition-all duration-500 group animate-float">
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-200/30 via-transparent to-teal-200/30 pointer-events-none group-hover:from-emerald-200/40 group-hover:to-teal-200/40 transition-all duration-500" />
-                <div className="relative rounded-2xl overflow-hidden">
-                  {PROFILE.photo ? (
-                    <img 
-                      src={PROFILE.photo} 
-                      alt="Portrait" 
-                      className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
-                    />
-                  ) : (
-                    <div className="w-full aspect-square bg-gradient-to-br from-emerald-400 to-teal-400 grid place-items-center group-hover:from-emerald-300 group-hover:to-teal-300 transition-all duration-500">
-                      <span className="text-4xl font-semibold text-emerald-950 group-hover:scale-110 transition-transform duration-300">{initials}</span>
-                    </div>
-                  )}
-                </div>
-                {/* Floating particles effect */}
-                <div className="absolute top-4 right-4 w-2 h-2 bg-emerald-300/60 rounded-full animate-ping" />
-                <div className="absolute bottom-6 left-6 w-1 h-1 bg-teal-300/80 rounded-full animate-pulse" />
-              </div>
+          <div className={`hud-identity ${heroVisible ? 'is-visible' : ''}`}>
+            <div className="hud-orbit hud-orbit-a" aria-hidden="true" />
+            <div className="hud-orbit hud-orbit-b" aria-hidden="true" />
+            <div className="hud-target" aria-hidden="true"><span /><span /></div>
+            <div className="hud-portrait-wrap">
+              {PROFILE.photo ? <img src={PROFILE.photo} alt="Portrait of Kira Schlei" /> : <span>{initials}</span>}
+            </div>
+            <div className="hud-id-label hud-id-label-top"><small>IDENT // CONFIRMED</small><strong>KS-01</strong></div>
+            <div className="hud-id-label hud-id-label-bottom"><small>DISCIPLINE</small><strong>MECHATRONICS</strong></div>
+            <div className="hud-career-orbit">
+              <div className="career-orbit-slot career-tesla"><div className="hud-readout career-readout"><small>PREV.</small><b>TESLA</b></div></div>
+              <div className="career-orbit-slot career-zipline"><div className="hud-readout career-readout"><small>INC.</small><b>ZIPLINE</b></div></div>
+              <div className="career-orbit-slot career-generac"><div className="hud-readout career-readout"><small>PREV.</small><b>GENERAC</b></div></div>
             </div>
           </div>
         </div>
+        <div className="hud-scroll-cue" aria-hidden="true"><span>SCROLL TO EXPLORE</span><i /></div>
       </section>
 
-      {/* CONTENT SECTIONS (raised above bg) */}
-      <main className="relative z-10">
-        {/* Projects */}
-        <section id="projects" className="py-12 sm:py-16" ref={projectsRef}>
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div className={`flex items-end justify-between gap-4 transition-all duration-800 ${projectsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Projects</h2>
-              <a href="#contact" className="text-sm inline-flex items-center gap-1 hover:underline transition-all duration-300 hover:translate-x-1">Contact me →</a>
-            </div>
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+      <main>
+        <section id="projects" className="hud-section" ref={projectsRef}>
+          <div className="hud-container">
+            <HudSectionTitle code="01" eyebrow="SELECTED BUILDS" aside={<a href="#contact">INITIATE CONTACT ↗</a>}>Project archive</HudSectionTitle>
+            <div className="hud-project-grid">
               {PROJECTS.map((p, i) => (
-                <article
-                  key={i}
-                  className={`group relative overflow-hidden rounded-3xl ring-1 ring-white/10 bg-white/5 shadow-sm hover:bg-white/10 hover:ring-white/20 hover:scale-[1.02] hover:shadow-xl transition-all duration-500 flex flex-col ${
-                    animatedProjects.has(i) 
-                      ? 'opacity-100 translate-y-0' 
-                      : 'opacity-0 translate-y-8'
-                  }`}
-                  style={{ transitionDelay: `${i * 150}ms` }}
-                >
-                  <div className="aspect-[16/9] w-full overflow-hidden">
-                    {p.img ? (
-                      <img
-                        src={p.img}
-                        alt={`${p.title} — ${p.role}`}
-                        loading="lazy"
-                        className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                      />
-                    ) : (
-                      <div className="h-full w-full bg-gradient-to-br from-emerald-300/30 to-teal-300/30 group-hover:from-emerald-300/40 group-hover:to-teal-300/40 transition-all duration-500" />
-                    )}
+                <article key={p.slug} className={`hud-project-card ${animatedProjects.has(i) ? 'is-visible' : ''}`} style={{ transitionDelay: `${i * 120}ms` }}>
+                  <div className="hud-card-media">
+                    {p.img ? <img src={p.img} alt={`${p.title} — ${p.role}`} loading="lazy" /> : null}
+                    <span className="hud-card-number">PRJ_{String(i + 1).padStart(2, '0')}</span>
+                    <span className="hud-card-status"><i /> VALIDATED BUILD</span>
                   </div>
-
-                  <div className="p-5 pb-8 bg-emerald-950/40 backdrop-blur-sm border-t border-white/10 rounded-b-3xl flow-root">
-                    <div className="flex items-center justify-between gap-3">
-                      <h3 className="text-lg font-semibold leading-tight">{p.title}</h3>
-                      <span className="text-xs text-emerald-200/70">{p.role}</span>
-                    </div>
-                    <p className="mt-2 text-sm text-emerald-100/90">{p.summary}</p>
-                    <ul className="mt-3 space-y-1 text-sm text-emerald-100/85">
-                      {p.bullets?.map((b, j) => (
-                        <li key={j} className="flex items-start gap-2">
-                          <span aria-hidden="true">🟢</span>
-                          <span>{b}</span>
-                        </li>
-                      ))}
+                  <div className="hud-card-body">
+                    <p className="hud-card-role">{p.role}</p>
+                    <h3>{p.title}</h3>
+                    <p className="hud-card-summary">{p.summary}</p>
+                    <ul className="hud-card-points">
+                      {p.bullets?.map((b, j) => <li key={j}><span>{String(j + 1).padStart(2, '0')}</span>{b}</li>)}
                     </ul>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {p.tags?.map((t, j) => (
-                        <Tag key={j}>{t}</Tag>
-                      ))}
-                    </div>
-                    <div className="mt-5 flex justify-end">
-                      <Link
-                        to={`/projects/${p.slug}`}
-                        className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400 text-emerald-950 px-4 py-2 text-sm font-semibold shadow hover:brightness-110 hover:scale-105 hover:shadow-lg hover:shadow-emerald-400/25 transition-all duration-300 group/btn"
-                      >
-                        View project
-                        <Icon name="external" className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
-                      </Link>
+                    <div className="hud-card-footer">
+                      <div className="hud-tags">{p.tags?.map((t) => <Tag key={t}>{t}</Tag>)}</div>
+                      <Link to={`/projects/${p.slug}`} className="hud-open-project">OPEN FILE <span>↗</span></Link>
                     </div>
                   </div>
                 </article>
@@ -690,75 +656,56 @@ function HomePage() {
           </div>
         </section>
 
-        {/* Experience */}
-        <section id="experience" className="py-12 sm:py-16 border-t border-white/10">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Experience</h2>
-            <div className="mt-8 space-y-6">
+        <section id="experience" className="hud-section hud-section-alt">
+          <div className="hud-container">
+            <HudSectionTitle code="02" eyebrow="FIELD RECORD">Experience log</HudSectionTitle>
+            <div className="hud-timeline">
               {EXPERIENCE.map((e, i) => (
-                <div key={i} className="rounded-3xl ring-1 ring-white/10 bg-white/5 p-5">
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <div>
-                      <h3 className="font-semibold leading-tight">{e.title}</h3>
-                      <p className="text-sm text-emerald-100/85">{e.company}</p>
-                    </div>
-                    <span className="text-xs text-emerald-200/70">{e.period}</span>
+                <article key={e.company} className="hud-log-entry">
+                  <div className="hud-log-marker"><span>{String(i + 1).padStart(2, '0')}</span><i /></div>
+                  <div className="hud-log-meta"><small>TIME INDEX</small><strong>{e.period}</strong></div>
+                  <div className="hud-log-content">
+                    <p>{e.company}</p><h3>{e.title}</h3>
+                    <ul>{e.bullets.map((b, j) => <li key={j}>{b}</li>)}</ul>
                   </div>
-                  <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-emerald-100/85">
-                    {e.bullets.map((b, j) => (
-                      <li key={j}>{b}</li>
-                    ))}
-                  </ul>
-                </div>
+                </article>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Skills */}
-        <section id="skills" className="py-12 sm:py-16">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Skills</h2>
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {Object.entries(SKILLS).map(([cat, items]) => (
-                <div key={cat} className="rounded-3xl ring-1 ring-white/10 bg-white/5 p-5">
-                  <h3 className="font-semibold">{cat}</h3>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {items.map((s) => (
-                      <Tag key={s}>{s}</Tag>
-                    ))}
-                  </div>
-                </div>
+        <section id="skills" className="hud-section">
+          <div className="hud-container">
+            <HudSectionTitle code="03" eyebrow="CAPABILITY MATRIX">Systems &amp; tools</HudSectionTitle>
+            <div className="hud-skill-grid">
+              {Object.entries(SKILLS).map(([cat, items], i) => (
+                <article key={cat} className="hud-skill-module">
+                  <div className="hud-module-head"><span>MOD_{String(i + 1).padStart(2, '0')}</span><i /></div>
+                  <h3>{cat}</h3>
+                  <div className="hud-module-meter"><span style={{ width: `${84 + i * 5}%` }} /></div>
+                  <div className="hud-tags">{items.map((s) => <Tag key={s}>{s}</Tag>)}</div>
+                </article>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Contact */}
-        <section id="contact" className="py-12 sm:py-16 border-t border-white/10">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Contact</h2>
-            <p className="mt-3 text-emerald-100/90 max-w-2xl">Feel free to reach out at any time about my project or inquiries!</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a href={LINKS.email} className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400 text-emerald-950 px-4 py-2 text-sm font-semibold shadow hover:brightness-110">
-                <Icon name="mail" /> Email
-              </a>
-              <a href={LINKS.github} className="inline-flex items-center gap-2 rounded-2xl ring-1 ring-white/10 px-4 py-2 text-sm hover:bg-white/10">
-                <Icon name="github" /> GitHub
-              </a>
-              <a href={LINKS.linkedin} className="inline-flex items-center gap-2 rounded-2xl ring-1 ring-white/10 px-4 py-2 text-sm hover:bg-white/10">
-                <Icon name="linkedin" /> LinkedIn
-              </a>
-              <a href={LINKS.resume} className="inline-flex items-center gap-2 rounded-2xl ring-1 ring-white/10 px-4 py-2 text-sm hover:bg-white/10">
-                <Icon name="external" className="w-4 h-4" /> Résumé
-              </a>
+        <section id="contact" className="hud-section hud-contact-section">
+          <div className="hud-container">
+            <div className="hud-contact-panel">
+              <div><p className="hud-kicker"><span>SYS // 04</span> COMMUNICATION CHANNEL</p><h2>Open a channel.<br /><em>Let’s talk engineering.</em></h2></div>
+              <div className="hud-contact-copy"><p>Open to conversations about vehicle systems, electromechanical design, robotics, testing, and engineering teams solving hard physical problems.</p>
+                <div className="hud-actions">
+                  <a href={LINKS.email} className="hud-button hud-button-primary"><Icon name="mail" /> Send signal</a>
+                  <a href={LINKS.github} className="hud-button"><Icon name="github" /> GitHub</a>
+                  <a href={LINKS.linkedin} className="hud-button"><Icon name="linkedin" /> LinkedIn</a>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        <footer className="py-10">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center text-xs text-emerald-200/60">© {new Date().getFullYear()} {PROFILE.name}. Built with React & Tailwind.</div>
-        </footer>
+        <footer className="hud-footer"><div className="hud-container"><span>© {new Date().getFullYear()} {PROFILE.name}</span><span>KIRA.OS // ALL SYSTEMS NOMINAL</span><a href="#top">RETURN TO ORIGIN ↑</a></div></footer>
       </main>
     </div>
   );
@@ -791,14 +738,14 @@ function ProjectPage() {
   }
 
   return (
-    <div className="min-h-screen text-emerald-50">
+    <div className="project-page">
       {/* Background */}
-      <div className="fixed inset-0 -z-50 bg-gradient-to-br from-emerald-950 via-green-950 to-teal-950" />
+      <div className="fixed inset-0 -z-50 bg-[#02070b]" />
 
       {/* Project header with mini nav */}
-      <header className="sticky top-0 z-30 backdrop-blur bg-white/5 border-b border-white/10">
+      <header className="project-hud-header sticky top-0 z-30">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-12 flex items-center justify-between">
-          <button onClick={() => navigate(-1)} className="text-sm text-emerald-200/85 hover:text-emerald-200">← Back</button>
+          <button onClick={() => navigate(-1)} className="hud-button">← Return to archive</button>
           <nav className="hidden sm:flex items-center gap-4 text-sm">
             <a href="#overview" className="hover:underline">Overview</a>
             {p.objective ? <a href="#objective" className="hover:underline">Objective</a> : null}
@@ -820,8 +767,9 @@ function ProjectPage() {
           <div className="space-y-6">
             {/* Title & Summary */}
             <div>
-              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">{p.title}</h1>
-              <p className="mt-2 text-emerald-200/85">{p.role}</p>
+              <p className="hud-kicker"><span>PROJECT FILE</span> {p.slug.toUpperCase()}</p>
+              <h1 className="mt-5 text-3xl sm:text-5xl font-bold tracking-tight uppercase text-cyan-50">{p.title}</h1>
+              <p className="mt-3 text-cyan-300/70 font-mono text-xs tracking-widest uppercase">{p.role}</p>
               <p className="mt-4 text-emerald-100/90">{p.summary}</p>
               {p.tags?.length ? (
                 <div className="mt-4 flex flex-wrap gap-2">{p.tags.map((t, i) => <Tag key={i}>{t}</Tag>)}</div>
@@ -832,7 +780,7 @@ function ProjectPage() {
                     href={p.githubRepo} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400 text-emerald-950 px-4 py-2 text-sm font-semibold shadow hover:brightness-110 hover:scale-105 hover:shadow-lg hover:shadow-emerald-400/25 transition-all duration-300 group"
+                    className="hud-button hud-button-primary group"
                   >
                     <Icon name="github" className="group-hover:rotate-12 transition-transform duration-300" />
                     <span>View Source Code</span>
