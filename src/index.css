@@ -36,10 +36,10 @@ a { color: inherit; }
   content: "";
   position: fixed;
   z-index: -2;
-  width: 62vw;
-  height: 62vw;
-  right: -12vw;
-  top: -18vw;
+  width: 82vw;
+  height: 72vw;
+  right: -20vw;
+  top: -20vw;
   border-radius: 50%;
   pointer-events: none;
   background: radial-gradient(circle, rgba(70, 255, 250, .18) 0, rgba(20, 170, 190, .08) 28%, transparent 68%);
@@ -93,7 +93,7 @@ a { color: inherit; }
 .hud-status i, .hud-card-status i { display: inline-block; width: 6px; height: 6px; margin-right: 7px; border-radius: 50%; background: #82ff9f; box-shadow: 0 0 11px #82ff9f; animation: hudPulse 2s ease-in-out infinite; }
 
 .hud-hero { position: relative; min-height: calc(100vh - 76px); display: grid; align-items: center; padding: 70px 0 84px; }
-.hud-hero::before { content: ""; position: absolute; inset: 6% -15% 0 35%; z-index: -1; opacity: .35; background: repeating-radial-gradient(circle at 60% 48%, transparent 0 54px, rgba(85,244,240,.09) 55px 56px, transparent 57px 92px); mask-image: radial-gradient(circle, #000, transparent 70%); }
+.hud-hero::before { content: ""; position: absolute; inset: 0 -28% -2% 12%; z-index: -1; opacity: .35; background: repeating-radial-gradient(circle at 64% 48%, transparent 0 54px, rgba(85,244,240,.09) 55px 56px, transparent 57px 92px); mask-image: radial-gradient(ellipse 80% 72% at 62% 48%, #000 28%, transparent 82%); }
 .hud-frame-corners { position: absolute; inset: 34px 0 36px; pointer-events: none; border-left: 1px solid rgba(85,244,240,.2); border-right: 1px solid rgba(85,244,240,.08); clip-path: polygon(0 0, 92px 0, 92px 1px, calc(100% - 92px) 1px, calc(100% - 92px) 0, 100% 0, 100% 100%, calc(100% - 92px) 100%, calc(100% - 92px) calc(100% - 1px), 92px calc(100% - 1px), 92px 100%, 0 100%); background: var(--line); }
 .hud-frame-corners { filter: drop-shadow(0 0 7px rgba(85,244,240,.62)); }
 .hud-hero-grid { display: grid; grid-template-columns: minmax(0, 1.16fr) minmax(380px, .84fr); gap: clamp(32px, 7vw, 100px); align-items: center; }
