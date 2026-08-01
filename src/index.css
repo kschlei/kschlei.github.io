@@ -36,13 +36,13 @@ a { color: inherit; }
   content: "";
   position: fixed;
   z-index: -2;
-  width: 82vw;
-  height: 72vw;
-  right: -20vw;
-  top: -20vw;
+  width: 120vw;
+  height: 58vw;
+  right: -18vw;
+  top: -12vw;
   border-radius: 50%;
   pointer-events: none;
-  background: radial-gradient(circle, rgba(70, 255, 250, .18) 0, rgba(20, 170, 190, .08) 28%, transparent 68%);
+  background: radial-gradient(ellipse at center, rgba(70, 255, 250, .18) 0, rgba(20, 170, 190, .08) 32%, transparent 72%);
   filter: blur(34px);
   animation: hudAura 8s ease-in-out infinite;
 }
